@@ -1,23 +1,24 @@
 <script setup>
 import { Sortable } from '@shopify/draggable';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
+import { useDraggableStore } from './stores/draggableStore';
 import Card from './components/Card.vue';
 
-const editMode = ref(false);
+const draggableStore = useDraggableStore();
 
 const colors = [
-  'rgb(0,175,100)',
-  'rgb(0,175,125)',
-  'rgb(0,175,150)',
-  'rgb(0,175,175)',
-  'rgb(0,175,200)',
-  'rgb(0,175,225)',
-  'rgb(0,175,250)',
-  'rgb(175,0,0)',
-  'rgb(175,0,25)',
-  'rgb(175,0,50)',
-  'rgb(175,0,75)',
-  'rgb(175,0,100)',
+  '#00af64',
+  '#00af7d',
+  '#00af96',
+  '#00afaf',
+  '#00afc8',
+  '#00afe1',
+  '#00affa',
+  '#af0000',
+  '#af0019',
+  '#af0032',
+  '#af004b',
+  '#af0064',
 ]
 
 onMounted(() => {
@@ -28,7 +29,7 @@ onMounted(() => {
   });
 
   sortable.on('sortable:start', (sortableEvent) => {
-    if (editMode.value) sortableEvent.cancel();
+    if (!draggableStore.dragActive) sortableEvent.cancel();
   });
 
   sortable.on('sortable:stop', (sortableEvent) => {
@@ -45,26 +46,19 @@ onMounted(() => {
   })
 })
 
-function getRandomColor() {
+const getRandomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
 </script>
 
 <template>
-
-  <div class="editModeSwitch">
-    <label for="editMode">Edit Mode:</label>
-    <input type="checkbox" id="editMode" v-model="editMode">
-  </div>
-
   <div class="grid">
 
     <div class="groupWrapper">
       Sekcja 1
       <transition-group tag="div" name="sortableCards" sortable class="group">
-        <Card v-for="num in 5" :key="'a' + num" sortItem class="item" :color=getRandomColor()
-          :contents="(num).toString()">
+        <Card v-for="num in 5" :key="'a' + num" sortItem :color=getRandomColor() :contents="(num).toString()">
         </Card>
       </transition-group>
     </div>
@@ -72,16 +66,16 @@ function getRandomColor() {
     <div class=" groupWrapper">
       Sekcja 2
       <transition-group tag="div" name="sortableCards" sortable class="group">
-        <Card v-for=" num  in  5 " :key="'b' + num" sortItem class="item" :color=getRandomColor()
-          :contents="(num + 5).toString()"></Card>
+        <Card v-for=" num  in  5 " :key="'b' + num" sortItem :color=getRandomColor() :contents="(num + 5).toString()">
+        </Card>
       </transition-group>
     </div>
 
     <div class="groupWrapper">
       Sekcja 3
       <transition-group tag="div" name="sortableCards" sortable class="group">
-        <Card v-for="num in 5" :key="'c' + num" sortItem class="item" :color=getRandomColor()
-          :contents="(num + 10).toString()"></Card>
+        <Card v-for="num in 5" :key="'c' + num" sortItem :color=getRandomColor() :contents="(num + 10).toString()">
+        </Card>
       </transition-group>
     </div>
 
@@ -89,13 +83,6 @@ function getRandomColor() {
 </template>
 
 <style scoped>
-.item {
-  border: 1px solid #efefef;
-  padding: 1em;
-  aspect-ratio: 1;
-  width: 4em;
-}
-
 .groupWrapper {
   text-align: center;
   margin: 2em;
@@ -108,13 +95,12 @@ function getRandomColor() {
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
+  justify-content: space-around;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1em;
-  justify-content: center;
-  align-items: center;
+  gap: .5em;
 }
 </style>
