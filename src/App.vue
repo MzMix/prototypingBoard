@@ -1,27 +1,22 @@
 <script setup>
 import { Sortable } from '@shopify/draggable';
 import { onMounted } from 'vue';
+
 import { useDraggableStore } from './stores/draggableStore';
+import { useCardStore } from './stores/cardStore';
+
+import CardGroup from './components/CardGroup.vue';
 import Card from './components/Card.vue';
 
-const draggableStore = useDraggableStore();
+import ExportButton from './components/ExportButton.vue';
+import ImportInput from './components/ImportInput.vue';
+import ClearButton from './components/ClearButton.vue';
 
-const colors = [
-  '#00af64',
-  '#00af7d',
-  '#00af96',
-  '#00afaf',
-  '#00afc8',
-  '#00afe1',
-  '#00affa',
-  '#af0000',
-  '#af0019',
-  '#af0032',
-  '#af004b',
-  '#af0064',
-]
+const draggableStore = useDraggableStore();
+const cardStore = useCardStore();
 
 onMounted(() => {
+
   const sortable = new Sortable(
     document.querySelectorAll('[sortable]'), {
     draggable: '[sortItem]',
@@ -33,53 +28,51 @@ onMounted(() => {
   });
 
   sortable.on('sortable:stop', (sortableEvent) => {
+    // Prevents firing when the card is dropped in the same group and position
+    // if (sortableEvent.oldContainer === sortableEvent.newContainer && sortableEvent.oldIndex === sortableEvent.newIndex) {
+    //   return;
+    // }
 
-    if (sortableEvent.oldContainer === sortableEvent.newContainer) {
-      return;
-    }
 
-    console.log("From: ")
-    console.log(sortableEvent.oldContainer)
+    cardStore.moveCard(
+      sortableEvent.data.dragEvent.data.originalSource.dataset.cardId,
+      sortableEvent.data.newContainer.dataset.groupId,
+      sortableEvent.data.newIndex
+    );
 
-    console.log("To: ")
-    console.log(sortableEvent.newContainer)
+    // try {
+    //   cardStore.moveCard({
+    //     cardId: sortableEvent.data.dragEvent.data.originalSource.dataset.cardId,
+    //     fromGroupId: sortableEvent.data.oldContainer.dataset.groupId,
+    //     toGroupId: sortableEvent.data.newContainer.dataset.groupId,
+    //   });
+    // } catch {
+    //   console.log('Error moving card');
+    // }
+
   })
 })
-
-const getRandomColor = () => {
-  return colors[Math.floor(Math.random() * colors.length)];
-}
 
 </script>
 
 <template>
-  <div class="grid">
+  <div>
 
-    <div class="groupWrapper">
-      Sekcja 1
-      <transition-group tag="div" name="sortableCards" sortable class="group">
-        <Card v-for="num in 5" :key="'a' + num" sortItem :color=getRandomColor() :contents="(num).toString()">
+    <ExportButton />
+    <ImportInput />
+    <ClearButton />
+
+    <div class="grid">
+
+      <CardGroup v-for="cardGroup in cardStore.cardGroups" :key="cardGroup.id" :data="cardGroup">
+        <Card v-for="card in cardGroup.cards" :key="card.id" :data="card">
         </Card>
-      </transition-group>
-    </div>
+      </CardGroup>
 
-    <div class=" groupWrapper">
-      Sekcja 2
-      <transition-group tag="div" name="sortableCards" sortable class="group">
-        <Card v-for=" num  in  5 " :key="'b' + num" sortItem :color=getRandomColor() :contents="(num + 5).toString()">
-        </Card>
-      </transition-group>
     </div>
-
-    <div class="groupWrapper">
-      Sekcja 3
-      <transition-group tag="div" name="sortableCards" sortable class="group">
-        <Card v-for="num in 5" :key="'c' + num" sortItem :color=getRandomColor() :contents="(num + 10).toString()">
-        </Card>
-      </transition-group>
-    </div>
-
   </div>
+
+
 </template>
 
 <style scoped>

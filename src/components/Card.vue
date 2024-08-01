@@ -4,18 +4,18 @@ import Modal from './Modal.vue';
 import { useDraggableStore } from '../stores/draggableStore'
 
 const props = defineProps({
-    color: {
-        type: String,
-        default: "rgb(70,175,100)"
-    },
-    contents: {
-        type: String,
-        default: "Lorem"
+    data: {
+        type: Object,
+        default: {
+            id: -1,
+            color: "#ffeb3b",
+            content: "Lorem"
+        }
     }
 });
 
-const contents = ref(props.contents);
-const color = ref(props.color);
+const contents = ref(props.data.content);
+const color = ref(props.data.color);
 const isModalVisible = ref(false);
 
 const draggableStore = useDraggableStore();
@@ -48,7 +48,7 @@ const notAllowDrag = () => {
 </script>
 
 <template>
-    <div sortItem class="post-it-note" :style="{ backgroundColor: color }">
+    <div sortItem class="post-it-note" :style="{ backgroundColor: color }" :data-card-id="data.id">
         <button @click="openModal" class="edit-button" @mouseover="notAllowDrag()" @mouseleave="allowDrag()"><i
                 class="bi bi-pencil"></i></button>
         <div class="contents">{{ contents }}</div>
