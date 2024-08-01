@@ -21,20 +21,10 @@ const handleFileChange = async (event) => {
 </script>
 
 <template>
-    <div class="import-input-container">
-        <input type="file" @change="handleFileChange" accept=".json" class="file-input" />
-    </div>
+    <input type="file" @change="handleFileChange" accept=".json" class="file-input" />
 </template>
 
-
 <style scoped>
-.import-input-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-}
-
 .file-input {
     padding: 10px;
     border: 1px solid #ccc;

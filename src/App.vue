@@ -11,6 +11,7 @@ import Card from './components/Card.vue';
 import ExportButton from './components/ExportButton.vue';
 import ImportInput from './components/ImportInput.vue';
 import ClearButton from './components/ClearButton.vue';
+import AddGroupButton from './components/AddGroupButton.vue';
 
 const draggableStore = useDraggableStore();
 const cardStore = useCardStore();
@@ -58,9 +59,12 @@ onMounted(() => {
 <template>
   <div>
 
-    <ExportButton />
-    <ImportInput />
-    <ClearButton />
+    <div class="inputs">
+      <ExportButton />
+      <ImportInput />
+      <ClearButton />
+      <AddGroupButton />
+    </div>
 
     <div class="grid">
 
@@ -76,6 +80,14 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.inputs {
+  display: flex;
+  justify-content: space-around;
+  margin: 2em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #ccc;
+}
+
 .groupWrapper {
   text-align: center;
   margin: 2em;

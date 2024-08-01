@@ -12,11 +12,9 @@ const clearStore = () => {
 </script>
 
 <template>
-    <div>
-        <button @click="clearStore" class="clear-button">
-            Clear Store
-        </button>
-    </div>
+    <button @click="clearStore" class="clear-button">
+        Clear Store
+    </button>
 </template>
 
 <style scoped>

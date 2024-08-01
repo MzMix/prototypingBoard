@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { useCardStore } from '../stores/cardStore';
 
 const props = defineProps({
     data: {
@@ -15,6 +16,12 @@ const props = defineProps({
 });
 
 const name = ref(props.data.name);
+const cardStore = useCardStore();
+
+function addCard() {
+    cardStore.addCard(props.data.id);
+}
+
 </script>
 
 <template>
@@ -23,14 +30,14 @@ const name = ref(props.data.name);
         <transition-group tag="div" name="sortableCards" sortable class="group" :data-group-id="data.id">
             <slot />
         </transition-group>
+
+        <button @click="addCard"><i class="bi bi-plus"></i></button>
     </div>
 </template>
 
 <style scoped>
 .groupWrapper {
-    text-align: center;
     margin: 2em;
-
     --primary-color: #dde024b0;
 }
 
@@ -51,5 +58,17 @@ h3 {
     flex-wrap: wrap;
     justify-content: space-around;
     gap: 1em;
+}
+
+button {
+    position: relative;
+    top: -3.5em;
+    right: -10.5em;
+
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
 }
 </style>

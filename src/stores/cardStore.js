@@ -86,11 +86,31 @@ export const useCardStore = defineStore('cards', () => {
         cardGroups.value = [];
     }
 
+    function addCard(groupId) {
+        const group = cardGroups.value.find(group => group.id === groupId);
+        const card = new Card();
+        card.id = Math.random().toString(36).substr(2, 9);
+        card.color = '#007bff';
+        card.content = `Card ${group.cards.length + 1}`;
+        group.cards.push(card);
+    }
+
+    function addGroup() {
+        const group = new CardGroup();
+        group.id = Math.random().toString(36).substr(2, 9);
+        group.name = `Group ${cardGroups.value.length + 1}`;
+        group.color = '#007bff';
+        group.cards = [];
+        cardGroups.value.push(group);
+    }
+
     return {
         cardGroups,
 
         moveCard,
-        resetStore
+        resetStore,
+        addCard,
+        addGroup
     }
 }
 )
