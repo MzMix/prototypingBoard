@@ -16,6 +16,8 @@ import AddGroupButton from './components/AddGroupButton.vue';
 const draggableStore = useDraggableStore();
 const cardStore = useCardStore();
 
+//Maybe use gzip to convert data for passing strings and we can pick either gzip or base64 based on the size of the data
+
 onMounted(() => {
 
   const sortable = new Sortable(
@@ -30,10 +32,9 @@ onMounted(() => {
 
   sortable.on('sortable:stop', (sortableEvent) => {
     // Prevents firing when the card is dropped in the same group and position
-    // if (sortableEvent.oldContainer === sortableEvent.newContainer && sortableEvent.oldIndex === sortableEvent.newIndex) {
-    //   return;
-    // }
-
+    if (sortableEvent.oldContainer === sortableEvent.newContainer && sortableEvent.oldIndex === sortableEvent.newIndex) {
+      return;
+    }
 
     cardStore.moveCard(
       sortableEvent.data.dragEvent.data.originalSource.dataset.cardId,
@@ -41,32 +42,22 @@ onMounted(() => {
       sortableEvent.data.newIndex
     );
 
-    // try {
-    //   cardStore.moveCard({
-    //     cardId: sortableEvent.data.dragEvent.data.originalSource.dataset.cardId,
-    //     fromGroupId: sortableEvent.data.oldContainer.dataset.groupId,
-    //     toGroupId: sortableEvent.data.newContainer.dataset.groupId,
-    //   });
-    // } catch {
-    //   console.log('Error moving card');
-    // }
-
   })
 })
 
 </script>
 
 <template>
-  <div>
+  <div class="background">
 
-    <div class="inputs">
+    <form class="inputs">
       <ExportButton />
       <ImportInput />
       <ClearButton />
       <AddGroupButton />
-    </div>
+    </form>
 
-    <div class="grid">
+    <div class="mainGrid">
 
       <CardGroup v-for="cardGroup in cardStore.cardGroups" :key="cardGroup.id" :data="cardGroup">
         <Card v-for="card in cardGroup.cards" :key="card.id" :data="card">
@@ -74,36 +65,30 @@ onMounted(() => {
       </CardGroup>
 
     </div>
-  </div>
 
+  </div>
 
 </template>
 
 <style scoped>
+.background {
+  min-height: 100vh;
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, grey 1px, transparent 1px),
+    linear-gradient(to bottom, grey 1px, transparent 1px);
+}
+
 .inputs {
   display: flex;
   justify-content: space-around;
-  margin: 2em;
-  padding-bottom: 1em;
-  border-bottom: 1px solid #ccc;
-}
-
-.groupWrapper {
-  text-align: center;
-  margin: 2em;
-}
-
-.group {
-  padding: 1em;
-  border: 2px solid #dde024b0;
-  border-radius: 0.5em;
-  display: flex;
-  flex-wrap: wrap;
   gap: 1em;
-  justify-content: space-around;
+  padding: 2em;
+  border-bottom: 1px solid #ccc;
+  background-color: #f8f9fa;
 }
 
-.grid {
+.mainGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: .5em;

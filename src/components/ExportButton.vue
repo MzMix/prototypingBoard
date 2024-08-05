@@ -12,23 +12,9 @@ const exportStore = () => {
 </script>
 
 <template>
-    <button @click="exportStore" class="export-button">
-        Export Store
+    <button @click="exportStore" class="form-control btn btn-info">
+        Pobierz <i class="bi bi-download"></i>
     </button>
 </template>
 
-<style scoped>
-.export-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.export-button:hover {
-    background-color: #0056b3;
-}
-</style>
+<style scoped></style>

@@ -48,12 +48,16 @@ onUnmounted(() => {
     <div v-if="visible" class="modal">
         <div class="modal-content">
             <span class="close" @click="close"><i class="bi bi-x"></i></span>
-            <h2>Edit Card</h2>
-            <label for="contents">Contents:</label>
-            <input id="contents" v-model="localContents" />
-            <label for="color">Color:</label>
-            <input id="color" type="color" v-model="localColor" />
-            <button class="save-button" @click="save">Save</button>
+
+            <h3 class="text-black">Edytuj</h3>
+
+            <label for="contents">Zawartość:</label>
+            <textarea id="contents" v-model="localContents" />
+
+            <label for="color">Kolor:</label>
+            <input id="color" type="color" class="form-control m-auto mb-4" v-model="localColor" />
+
+            <button class="btn btn-primary" @click="save">Zamknij</button>
         </div>
     </div>
 </template>
@@ -97,24 +101,19 @@ onUnmounted(() => {
     color: #000;
 }
 
-h2 {
-    margin-top: 0;
-}
-
 label {
     display: block;
     margin-top: 1em;
     font-weight: bold;
+    color: #333;
 }
 
-input[type="text"],
-input[type="color"] {
-    width: calc(100% - 2em);
+textarea {
+    width: 100%;
+    height: 10em;
     padding: 0.5em;
-    margin-top: 0.5em;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-sizing: border-box;
 }
 
 input[type="color"] {

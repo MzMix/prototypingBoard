@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Modal from './Modal.vue';
 import { useDraggableStore } from '../stores/draggableStore'
+import { getFontColorForBackfround } from '../utils/utils';
 
 const props = defineProps({
     data: {
@@ -45,29 +46,35 @@ const notAllowDrag = () => {
     draggableStore.setDraggable(false);
 };
 
+function getFontColor() { return getFontColorForBackfround(color.value); }
+
 </script>
 
 <template>
-    <div sortItem class="post-it-note" :style="{ backgroundColor: color }" :data-card-id="data.id">
+    <div sortItem class="post-it-note" :style="{ backgroundColor: color, color: getFontColor() }"
+        :data-card-id="data.id">
+
         <button @click="openModal" class="edit-button" @mouseover="notAllowDrag()" @mouseleave="allowDrag()"><i
                 class="bi bi-pencil"></i></button>
         <div class="contents">{{ contents }}</div>
+
         <Modal :visible="isModalVisible" :contents="contents" :color="color" @close="closeModal" @save="saveChanges" />
     </div>
 </template>
 
 <style scoped>
 .post-it-note {
-    border: 1px solid #efefef;
-    padding: 1em;
-    width: 10em;
-    aspect-ratio: 1;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    /* transform: rotate(-2deg); */
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: relative;
+
+    width: 10em;
+    aspect-ratio: 1;
+    padding: 1em;
+
+    border: 1px solid #efefef69;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .edit-button {

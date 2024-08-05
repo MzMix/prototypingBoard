@@ -21,15 +21,7 @@ const handleFileChange = async (event) => {
 </script>
 
 <template>
-    <input type="file" @change="handleFileChange" accept=".json" class="file-input" />
+    <input type="file" @change="handleFileChange" accept=".json" class="form-control" />
 </template>
 
-<style scoped>
-.file-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-</style>
+<style scoped></style>

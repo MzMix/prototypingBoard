@@ -21,7 +21,8 @@ export const useCardStore = defineStore('cards', () => {
     const cardGroups = ref(useLocalStorage('cardGroups', [
         {
             id: '1',
-            name: 'To Do',
+            name: 'Group 1',
+            color: '#007bff',
             cards: [
                 {
                     id: '1',
@@ -42,7 +43,8 @@ export const useCardStore = defineStore('cards', () => {
         },
         {
             id: '2',
-            name: 'In Progress',
+            name: 'Group 2',
+            color: '#17a2b8',
             cards: [
                 {
                     id: '4',
@@ -58,7 +60,8 @@ export const useCardStore = defineStore('cards', () => {
         },
         {
             id: '3',
-            name: 'Done',
+            name: 'Group 3',
+            color: '#ffc107',
             cards: [
                 {
                     id: '6',
