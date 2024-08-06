@@ -1,32 +1,18 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
     visible: Boolean,
-    contents: String,
-    color: String
 });
 
 const emit = defineEmits(['close', 'save']);
-
-const localContents = ref(props.contents);
-const localColor = ref(props.color);
-
-watch(() => props.contents, (newContents) => {
-    localContents.value = newContents;
-});
-
-watch(() => props.color, (newColor) => {
-    localColor.value = newColor;
-});
 
 const close = () => {
     emit('close');
 };
 
 const save = () => {
-    emit('save', { contents: localContents.value, color: localColor.value });
-    close();
+    emit('save');
 };
 
 const handleKeydown = (event) => {
@@ -48,16 +34,9 @@ onUnmounted(() => {
     <div v-if="visible" class="modal">
         <div class="modal-content">
             <span class="close" @click="close"><i class="bi bi-x"></i></span>
+            <slot></slot>
+            <button class="btn btn-primary" @click="save">Zapisz</button>
 
-            <h3 class="text-black">Edytuj</h3>
-
-            <label for="contents">Zawartość:</label>
-            <textarea id="contents" v-model="localContents" />
-
-            <label for="color">Kolor:</label>
-            <input id="color" type="color" class="form-control m-auto mb-4" v-model="localColor" />
-
-            <button class="btn btn-primary" @click="save">Zamknij</button>
         </div>
     </div>
 </template>
@@ -99,42 +78,6 @@ onUnmounted(() => {
 
 .close:hover {
     color: #000;
-}
-
-label {
-    display: block;
-    margin-top: 1em;
-    font-weight: bold;
-    color: #333;
-}
-
-textarea {
-    width: 100%;
-    height: 10em;
-    padding: 0.5em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-input[type="color"] {
-    height: 2em;
-    padding: 0;
-    border: none;
-}
-
-.save-button {
-    margin-top: 1.5em;
-    padding: 0.75em 1.5em;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.save-button:hover {
-    background-color: #0056b3;
 }
 
 @keyframes fadeIn {

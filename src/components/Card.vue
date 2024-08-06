@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Modal from './Modal.vue';
 import { useDraggableStore } from '../stores/draggableStore'
+import { useCardStore } from '../stores/cardStore';
 import { getFontColorForBackfround } from '../utils/utils';
 
 const props = defineProps({
@@ -20,6 +21,18 @@ const color = ref(props.data.color);
 const isModalVisible = ref(false);
 
 const draggableStore = useDraggableStore();
+const cardStore = useCardStore();
+
+const deleteCard = () => {
+    let result = confirm("Czy na pewno chcesz usunąć tę kartę?");
+    if (!result) return;
+    cardStore.deleteCard(props.data.id);
+};
+
+const saveData = () => {
+    cardStore.updateCard(props.data.id, contents.value, color.value);
+    closeModal();
+}
 
 const openModal = () => {
     isModalVisible.value = true;
@@ -29,12 +42,6 @@ const openModal = () => {
 const closeModal = () => {
     isModalVisible.value = false;
     allowDrag();
-};
-
-const saveChanges = (data) => {
-    contents.value = data.contents;
-    color.value = data.color;
-    closeModal();
 };
 
 const allowDrag = () => {
@@ -54,11 +61,24 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
     <div sortItem class="post-it-note" :style="{ backgroundColor: color, color: getFontColor() }"
         :data-card-id="data.id">
 
+        <button @click="deleteCard" class="delete-button" @mouseover="notAllowDrag()" @mouseleave="allowDrag()"><i
+                class="bi bi-trash"></i></button>
+
         <button @click="openModal" class="edit-button" @mouseover="notAllowDrag()" @mouseleave="allowDrag()"><i
                 class="bi bi-pencil"></i></button>
+
         <div class="contents">{{ contents }}</div>
 
-        <Modal :visible="isModalVisible" :contents="contents" :color="color" @close="closeModal" @save="saveChanges" />
+        <Modal :visible="isModalVisible" @close="closeModal" @save="saveData">
+            <h3 class="text-black">Edytuj</h3>
+
+            <label for="contents" class="text-black">Zawartość:</label>
+            <textarea id="contents" v-model="contents" />
+
+            <label for="color" class="text-black">Kolor:</label>
+            <input id="color" type="color" class="form-control m-auto mb-4" v-model="color" />
+        </Modal>
+
     </div>
 </template>
 
@@ -77,11 +97,10 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.delete-button,
 .edit-button {
     position: absolute;
     top: 0.5em;
-    right: 0.5em;
-    background-color: #ffeb3b;
     border: none;
     border-radius: 25%;
     width: 2em;
@@ -94,9 +113,23 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
     transition: background-color 0.3s, transform 0.3s;
 }
 
+.delete-button {
+    left: 0.5em;
+    background-color: #eb4605;
+    color: white;
+}
+
+.edit-button {
+    right: 0.5em;
+    background-color: #ffeb3b;
+}
+
+.delete-button:hover {
+    background-color: #a33003;
+}
+
 .edit-button:hover {
     background-color: #fdd835;
-
 }
 
 .contents {

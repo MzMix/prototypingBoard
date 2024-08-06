@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useCardStore } from '../stores/cardStore';
 import { getFontColorForBackfround } from '../utils/utils';
+import Modal from './Modal.vue';
 
 const props = defineProps({
     data: {
@@ -19,12 +20,33 @@ const props = defineProps({
 const name = ref(props.data.name);
 const color = ref(props.data.color);
 const cardStore = useCardStore();
+const isModalVisible = ref(false);
 
 function addCard() {
     cardStore.addCard(props.data.id);
 }
 
-function getFontColor() { return getFontColorForBackfround(color.value); }
+const getFontColor = () => getFontColorForBackfround(color.value);
+
+const openModal = () => {
+    isModalVisible.value = true;
+};
+
+const closeModal = () => {
+    isModalVisible.value = false;
+};
+
+const saveData = () => {
+    cardStore.updateGroup(props.data.id, name.value, color.value);
+    closeModal();
+}
+
+const deleteAllCards = () => {
+    let response = confirm("Czy na pewno chcesz usunąć grupę?");
+    if (!response) return;
+    cardStore.deleteGroup(props.data.id);
+    // cardStore.deleteAllCards(props.data.id);
+};
 
 </script>
 
@@ -40,11 +62,22 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
 
             <div key="ButtonGroup" class="ButtonGroup">
                 <button @click="deleteAllCards" class="DeleteAllButton"><i class="bi bi-trash"></i></button>
-                <button @click="editGroup" class="EditGroupButton"><i class="bi bi-pencil"></i></button>
+                <button @click="openModal" class="EditGroupButton"><i class="bi bi-pencil"></i></button>
                 <button @click="addCard" class="AddButton"><i class="bi bi-plus"></i></button>
             </div>
 
         </div>
+
+        <Modal :visible="isModalVisible" @close="closeModal" @save="saveData">
+            <h3 class="text-black">Edytuj</h3>
+
+            <label for="name">Nazwa:</label>
+            <input type="text" class="form-control" id="name" v-model="name" />
+
+            <label for="color">Kolor:</label>
+            <input id="color" type="color" class="form-control m-auto mb-4" v-model="color" />
+
+        </Modal>
     </div>
 </template>
 

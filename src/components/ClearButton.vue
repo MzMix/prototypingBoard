@@ -5,7 +5,7 @@ import { useCardStore } from '../stores/cardStore';
 const cardStore = useCardStore();
 
 const clearStore = () => {
-    if (window.confirm('Are you sure you want to clear the store?')) {
+    if (window.confirm('Czy na pewno chcesz usunąć wszystkie dane?')) {
         cardStore.resetStore();
     }
 };

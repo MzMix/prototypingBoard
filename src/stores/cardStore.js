@@ -107,13 +107,44 @@ export const useCardStore = defineStore('cards', () => {
         cardGroups.value.push(group);
     }
 
+    function deleteAllCards(groupId) {
+        const group = cardGroups.value.find(group => group.id === groupId);
+        group.cards = [];
+    }
+
+    function updateCard(cardId, content, color) {
+        const group = cardGroups.value.find(group => group.cards.find(card => card.id === cardId));
+        const card = group.cards.find(card => card.id === cardId);
+        card.content = content;
+        card.color = color;
+    }
+
+    function updateGroup(groupId, name, color) {
+        const group = cardGroups.value.find(group => group.id === groupId);
+        group.name = name;
+        group.color = color;
+    }
+
+    function deleteCard(cardId) {
+        const group = cardGroups.value.find(group => group.cards.find(card => card.id === cardId));
+        group.cards = group.cards.filter(card => card.id !== cardId);
+    }
+
+    function deleteGroup(groupId) {
+        cardGroups.value = cardGroups.value.filter(group => group.id !== groupId);
+    }
+
     return {
         cardGroups,
 
         moveCard,
         resetStore,
         addCard,
-        addGroup
+        addGroup,
+        deleteAllCards,
+        updateCard,
+        updateGroup,
+        deleteCard,
+        deleteGroup
     }
-}
-)
+})
