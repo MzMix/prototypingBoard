@@ -90,13 +90,13 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
 
 <style scoped>
 .post-it-note {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
     width: 10em;
-    aspect-ratio: 1;
+    min-height: 10em;
+    /* aspect-ratio: 1; */
     padding: .25em;
 
     border: 1px solid #efefef69;
@@ -155,9 +155,9 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
 
 .contents {
     flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-align: center;
+    overflow: hidden;
+    word-wrap: break-word;
+    padding: 0.5em;
 }
 </style>
