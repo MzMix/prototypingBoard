@@ -98,6 +98,17 @@ export const useCardStore = defineStore('cards', () => {
         group.cards.push(card);
     }
 
+    function copyCard(existingCardId) {
+        const group = cardGroups.value.find(group => group.cards.find(card => card.id === existingCardId));
+        const existingCard = group.cards.find(card => card.id === existingCardId);
+
+        const card = new Card();
+        card.id = Math.random().toString(36).substr(2, 9);
+        card.color = existingCard.color;
+        card.content = existingCard.content;
+        group.cards.push(card);
+    }
+
     function addGroup() {
         const group = new CardGroup();
         group.id = Math.random().toString(36).substr(2, 9);
@@ -140,6 +151,7 @@ export const useCardStore = defineStore('cards', () => {
         moveCard,
         resetStore,
         addCard,
+        copyCard,
         addGroup,
         deleteAllCards,
         updateCard,

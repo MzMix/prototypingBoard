@@ -28,6 +28,18 @@ function addCard() {
 
 const getFontColor = () => getFontColorForBackfround(color.value);
 
+const floatToHex = (float) => {
+    const hex = Math.round(float * 255).toString(16);
+    return hex.padStart(2, '0');
+};
+
+const getBackgroundColorWithAddedOpacity = (opacityValue) => {
+    const opacityHex = floatToHex(opacityValue);
+
+    console.log(color.value + opacityHex);
+    return color.value + opacityHex;
+}
+
 const openModal = () => {
     isModalVisible.value = true;
 };
@@ -53,14 +65,14 @@ const deleteAllCards = () => {
 <template>
     <div class="groupWrapper">
         <h3 :style="{ backgroundColor: color, color: getFontColor() }">{{ name }}</h3>
-        <div class="group" :style="{ backgroundColor: color }" :data-group-id="data.id">
+        <div class="group" :data-group-id="data.id">
 
-            <transition-group tag="div" name="sortableCards" sortable class="cards" :style="{ backgroundColor: color }"
-                :data-group-id="data.id">
+            <transition-group tag="div" name="sortableCards" sortable class="cards" :data-group-id="data.id"
+                :style="{ backgroundColor: getBackgroundColorWithAddedOpacity(0.3) }">
                 <slot />
             </transition-group>
 
-            <div key="ButtonGroup" class="ButtonGroup">
+            <div key="ButtonGroup" class="ButtonGroup" :style="{ backgroundColor: color }">
                 <button @click="deleteAllCards" class="DeleteAllButton"><i class="bi bi-trash"></i></button>
                 <button @click="openModal" class="EditGroupButton"><i class="bi bi-pencil"></i></button>
                 <button @click="addCard" class="AddButton"><i class="bi bi-plus"></i></button>
@@ -110,6 +122,7 @@ h3 {
     flex-wrap: wrap;
     justify-content: space-around;
     gap: 1em;
+    border-radius: 0.25em 0.25em 0 0;
 }
 
 .ButtonGroup {
@@ -119,7 +132,7 @@ h3 {
     padding: 1em;
 
     border-top: 1px solid #4b44445e;
-    border-radius: .25em;
+    border-radius: 0 0 0.25em 0.25em;
 }
 
 button {

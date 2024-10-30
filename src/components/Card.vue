@@ -29,6 +29,10 @@ const deleteCard = () => {
     cardStore.deleteCard(props.data.id);
 };
 
+const duplicateCard = () => {
+    cardStore.copyCard(props.data.id);
+}
+
 const saveData = () => {
     cardStore.updateCard(props.data.id, contents.value, color.value);
     closeModal();
@@ -61,11 +65,13 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
     <div sortItem class="post-it-note" :style="{ backgroundColor: color, color: getFontColor() }"
         :data-card-id="data.id">
 
-        <button @click="deleteCard" class="delete-button" @mouseover="notAllowDrag()" @mouseleave="allowDrag()"><i
-                class="bi bi-trash"></i></button>
+        <div class="button-group" @mouseover="notAllowDrag()" @mouseleave="allowDrag()">
+            <button @click="deleteCard" class="delete-button"><i class="bi bi-trash"></i></button>
 
-        <button @click="openModal" class="edit-button" @mouseover="notAllowDrag()" @mouseleave="allowDrag()"><i
-                class="bi bi-pencil"></i></button>
+            <button @click="duplicateCard" class="duplicate-button"><i class="bi bi-copy"></i></button>
+
+            <button @click="openModal" class="edit-button"><i class="bi bi-pencil"></i></button>
+        </div>
 
         <div class="contents">{{ contents }}</div>
 
@@ -91,16 +97,24 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
 
     width: 10em;
     aspect-ratio: 1;
-    padding: 1em;
+    padding: .25em;
 
     border: 1px solid #efefef69;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.button-group {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: .2em;
+    border-bottom: 1px solid #efefef69;
+}
+
 .delete-button,
+.duplicate-button,
 .edit-button {
-    position: absolute;
-    top: 0.5em;
     border: none;
     border-radius: 25%;
     width: 2em;
@@ -114,18 +128,25 @@ function getFontColor() { return getFontColorForBackfround(color.value); }
 }
 
 .delete-button {
-    left: 0.5em;
     background-color: #eb4605;
     color: white;
 }
 
+.duplicate-button {
+    background-color: #a205eb;
+    color: white;
+}
+
 .edit-button {
-    right: 0.5em;
     background-color: #ffeb3b;
 }
 
 .delete-button:hover {
     background-color: #a33003;
+}
+
+.duplicate-button:hover {
+    background-color: #9003d1;
 }
 
 .edit-button:hover {
