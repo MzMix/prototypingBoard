@@ -145,6 +145,11 @@ export const useCardStore = defineStore('cards', () => {
         cardGroups.value = cardGroups.value.filter(group => group.id !== groupId);
     }
 
+    function loadStoreFromJsonFile(json) {
+        const value = JSON.parse(json);
+        this.$patch(value);
+    }
+
     return {
         cardGroups,
 
@@ -157,6 +162,7 @@ export const useCardStore = defineStore('cards', () => {
         updateCard,
         updateGroup,
         deleteCard,
-        deleteGroup
+        deleteGroup,
+        loadStoreFromJsonFile
     }
 })

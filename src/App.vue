@@ -12,9 +12,11 @@ import ExportButton from './components/ExportButton.vue';
 import ImportInput from './components/ImportInput.vue';
 import ClearButton from './components/ClearButton.vue';
 import AddGroupButton from './components/AddGroupButton.vue';
+import { storeToRefs } from 'pinia';
 
 const draggableStore = useDraggableStore();
 const cardStore = useCardStore();
+const { cardGroups } = storeToRefs(cardStore);
 
 //Maybe use gzip to convert data for passing strings and we can pick either gzip or base64 based on the size of the data
 
@@ -59,7 +61,7 @@ onMounted(() => {
 
     <div class="mainGrid">
 
-      <CardGroup v-for="cardGroup in cardStore.cardGroups" :key="cardGroup.id" :data="cardGroup">
+      <CardGroup v-for="cardGroup in cardGroups" :key="cardGroup.id" :data="cardGroup">
         <Card v-for="card in cardGroup.cards" :key="card.id" :data="card">
         </Card>
       </CardGroup>
